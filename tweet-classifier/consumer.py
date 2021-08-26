@@ -44,7 +44,7 @@ def main():
     channel.queue_declare(queue='tweets', durable='true')
 
     def callback(ch, method, properties, body):
-        csvFile = open('tweets.csv', 'a')
+        csvFile = open('tweets-ead-v1.csv', 'a')
         csvWriter = csv.writer(csvFile)
         tweet = json.loads(body)
         clean_tweet, lower_tweet, translated_tweet = tweet_cleaner(tweet['text'])
@@ -58,8 +58,9 @@ def main():
             sentiment = 'neutral'
         elif((vs['compound'] <= -0.05)):
             sentiment = 'negative'
+        # print("{:-<65} {} --> {}".format(tweet['text'], str(vs), sentiment))
         print("{:-<65} {} --> {}".format(tweet['text'], str(vs), sentiment))
-        csvWriter.writerow([tweet['created_at'], tweet['text'].encode('utf-8'), lower_tweet, translated_tweet, clean_tweet, vs, sentiment])
+        csvWriter.writerow([tweet['matching_rules'][0]['tag'], tweet['created_at'], tweet['text'].encode('utf-8'), lower_tweet, translated_tweet, clean_tweet, vs, sentiment])
         csvFile.close()
 
     channel.basic_consume(queue='tweets', on_message_callback=callback, auto_ack=True)

@@ -20,19 +20,23 @@ export class TweetStreamClient {
       try {
         const json = JSON.parse(data)
 
-        const tweet: TweetModel = {
-          id: json.data.id,
-          text: json.data.text,
-          author: json.includes.users.filter(user => user.id === json.data.author_id)[0],
-          matching_rules: json.matching_rules ,
-          created_at: json.data.created_at,
-          lang: json.data.lang
-        }
+        const tweet = this.tweetDataTransformer(json)
 
         await this.tweetRepository.insertOne(tweet)
       } catch (error) {
         console.error(error)
       }
     })
+  }
+
+  private tweetDataTransformer (json: any): TweetModel {
+    return {
+      id: json.data.id,
+      text: json.data.text,
+      author: json.includes.users.filter(user => user.id === json.data.author_id)[0],
+      matching_rules: json.matching_rules ,
+      created_at: json.data.created_at,
+      lang: json.data.lang
+    }
   }
 }

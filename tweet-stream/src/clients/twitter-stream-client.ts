@@ -1,4 +1,5 @@
 import { MessageBrokerService } from '@/services'
+import { TweetModel } from '@/domain/models'
 import env from '@/config/env'
 
 import needle from 'needle'
@@ -19,17 +20,18 @@ export class TweetStreamClient {
       try {
         const json = JSON.parse(data)
 
-        const tweet = {
+        // TODO add types for the tweet,author, matching rules
+        const tweet: TweetModel = {
           id: json.data.id,
           text: json.data.text,
-          author_id: json.data.author_id,
-          user: json.includes.users.filter(user => user.id === json.data.author_id),
+          author: json.includes.users.filter(user => user.id === json.data.author_id)[0],
           matching_rules: json.matching_rules ,
           created_at: json.data.created_at,
           lang: json.data.lang
         }
 
-        this.brokerService.publish(JSON.stringify(tweet))
+        console.log(tweet)
+        // this.brokerService.publish(JSON.stringify(tweet))
       } catch (error) {
         console.error(error)
       }

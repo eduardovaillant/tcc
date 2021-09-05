@@ -1,9 +1,14 @@
+import { TweetRepository } from '@/infra/db'
 import { TweetModel } from '@/domain/models'
 import env from '@/config/env'
 
 import needle from 'needle'
 
 export class TweetStreamClient {
+  constructor (
+    private readonly tweetRepository: TweetRepository
+  ) {}
+
   async start (): Promise<void> {
     const config = { headers: { Authorization: `Bearer ${env.bearerToken}` } }
     const expansions = '?tweet.fields=created_at,lang&expansions=author_id&user.fields=created_at,description,profile_image_url,public_metrics,url'
@@ -15,7 +20,6 @@ export class TweetStreamClient {
       try {
         const json = JSON.parse(data)
 
-        // TODO add types for the tweet,author, matching rules
         const tweet: TweetModel = {
           id: json.data.id,
           text: json.data.text,
@@ -25,8 +29,7 @@ export class TweetStreamClient {
           lang: json.data.lang
         }
 
-        console.log(tweet)
-        // this.brokerService.publish(JSON.stringify(tweet))
+        await this.tweetRepository.insertOne(tweet)
       } catch (error) {
         console.error(error)
       }

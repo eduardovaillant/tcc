@@ -1,5 +1,5 @@
 import 'module-alias/register'
-import { TweetStreamClient } from '@/clients'
+import { TweetStreamClient } from '@/infra/clients'
 
 async function streamFactory (): Promise<void> {
   const stream = new TweetStreamClient()

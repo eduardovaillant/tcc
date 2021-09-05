@@ -1,11 +1,8 @@
 import 'module-alias/register'
 import { TweetStreamClient } from '@/clients'
-import { MessageBrokerService } from '@/services'
 
 async function streamFactory (): Promise<void> {
-  const brokerService = new MessageBrokerService()
-  await brokerService.createQueue()
-  const stream = new TweetStreamClient(brokerService)
+  const stream = new TweetStreamClient()
   await stream.start()
 }
 

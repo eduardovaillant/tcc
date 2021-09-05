@@ -1,14 +1,9 @@
-import { MessageBrokerService } from '@/services'
 import { TweetModel } from '@/domain/models'
 import env from '@/config/env'
 
 import needle from 'needle'
 
 export class TweetStreamClient {
-  constructor (
-    private readonly brokerService: MessageBrokerService
-  ) {}
-
   async start (): Promise<void> {
     const config = { headers: { Authorization: `Bearer ${env.bearerToken}` } }
     const expansions = '?tweet.fields=created_at,lang&expansions=author_id&user.fields=created_at,description,profile_image_url,public_metrics,url'

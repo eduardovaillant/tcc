@@ -1,8 +1,8 @@
 import 'module-alias/register'
 import { MessageBrokerService } from '@/infra/services'
 import { TweetRepository } from '@/infra/db'
-import { producerFactory } from './producer'
-import { consumerFactory } from './consumer'
+import { producerFactory } from './scripts/producer'
+import { consumerFactory } from './scripts/consumer'
 
 const messageBrokerServiceFactory = async (): Promise<MessageBrokerService> => {
   const tweetRepository = new TweetRepository()

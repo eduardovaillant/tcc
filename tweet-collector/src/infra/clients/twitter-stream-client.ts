@@ -1,4 +1,4 @@
-import { TweetRepository } from '@/infra/db'
+import { MessageBrokerService } from '@/infra/services'
 import { TweetModel } from '@/domain/models'
 import env from '@/config/env'
 
@@ -6,7 +6,7 @@ import needle from 'needle'
 
 export class TweetStreamClient {
   constructor (
-    private readonly tweetRepository: TweetRepository
+    private readonly brokerService: MessageBrokerService
   ) {}
 
   async start (): Promise<void> {
@@ -22,7 +22,7 @@ export class TweetStreamClient {
 
         const tweet = this.tweetDataTransformer(json)
 
-        await this.tweetRepository.insertOne(tweet)
+        this.brokerService.publish(JSON.stringify(tweet))
       } catch (error) {
         console.error(error)
       }

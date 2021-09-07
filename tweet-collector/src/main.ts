@@ -1,18 +1,23 @@
 import 'module-alias/register'
-import { TweetStreamClient } from '@/infra/clients'
-import { MongoHelper, TweetRepository } from './infra/db'
-import env from './config/env'
+import { MessageBrokerService } from '@/infra/services'
+import { TweetRepository } from '@/infra/db'
+import { producerFactory } from './producer'
+import { consumerFactory } from './consumer'
 
-async function streamFactory (): Promise<void> {
+const messageBrokerServiceFactory = async (): Promise<MessageBrokerService> => {
   const tweetRepository = new TweetRepository()
-  const stream = new TweetStreamClient(tweetRepository)
-  await stream.start()
+  const brokerService = new MessageBrokerService(tweetRepository)
+  await brokerService.createConnection()
+  return brokerService
 }
 
-MongoHelper.connect(env.mongoUrl).then(
-  async () => streamFactory().then(
-    () => console.log('Running ...'),
-    error => console.error(error)
-  ),
+const main = async (): Promise<void> => {
+  const brokerService = await messageBrokerServiceFactory()
+  await producerFactory(brokerService)
+  await consumerFactory(brokerService)
+}
+
+main().then(
+  () => console.log('Collector Running ...'),
   error => console.error(error)
 )

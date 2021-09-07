@@ -8,5 +8,6 @@ export default {
   bearerToken: process.env.BEARER_TOKEN || '',
   accessToken: process.env.ACCESS_TOKEN || '',
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET || '',
-  mongoUrl: process.env.MONGO_URL || 'mongodb://localhost:27017/TCC'
+  mongoUrl: process.env.MONGO_URL || 'mongodb://localhost:27017/TCC',
+  rabbitmqUrl: process.env.RABBITMQ_URL || 'amqp://rabbitmq:5672'
 }

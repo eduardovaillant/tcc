@@ -1,5 +1,13 @@
 version: "3.2"
-services: 
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:4.2
+    restart: always
+    volumes:
+      - ./data:/data/db:z
+    ports:
+      - "27017:27017"
   rabbitmq:
     image: rabbitmq:3.8
     restart: always
@@ -15,7 +23,9 @@ services:
     image: node:14
     working_dir: /usr/src/tweet-collector
     restart: always
-    command: bash -c "npm install --only=prod && npm run start"   
+    command: bash -c "npm install --only=prod && npm run start"
+    environment: 
+      - MONGO_URL=mongodb://mongo:27017/TCC
     env_file:
       - ./.env
     volumes: 
@@ -23,3 +33,4 @@ services:
       - ./package.json:/usr/src/tweet-collector/package.json:z   
     links: 
       - rabbitmq
+      - mongo

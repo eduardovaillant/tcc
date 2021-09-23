@@ -35,4 +35,4 @@ services:
       - ./package.json:/usr/src/tweet-collector/package.json:z   
     links: 
       - rabbitmq
-      - mongo
+      - mongo  

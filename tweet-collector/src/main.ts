@@ -13,7 +13,7 @@ const messageBrokerServiceFactory = async (): Promise<MessageBrokerService> => {
 const main = async (): Promise<void> => {
   const brokerService = await messageBrokerServiceFactory()
   await producerFactory(brokerService)
-  await consumerFactory(brokerService)
+  // await consumerFactory(brokerService)
 }
 
 main().then(

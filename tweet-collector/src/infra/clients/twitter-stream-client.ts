@@ -22,6 +22,8 @@ export class TweetStreamClient {
 
         const tweet = this.tweetDataTransformer(json)
 
+        console.log(tweet)
+
         this.brokerService.publish(JSON.stringify(tweet))
       } catch (error) {
         console.error(error)

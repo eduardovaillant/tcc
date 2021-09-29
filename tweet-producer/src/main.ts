@@ -1,11 +1,10 @@
 import 'module-alias/register'
-import { consumerFactory, producerFactory } from '@/application'
+import { producerFactory } from '@/application'
 import { MessageBrokerService } from '@/infra/services'
-import { TweetRepository } from '@/infra/db'
+import env from '@/config/env'
 
 const messageBrokerServiceFactory = async (): Promise<MessageBrokerService> => {
-  const tweetRepository = new TweetRepository()
-  const brokerService = new MessageBrokerService(tweetRepository)
+  const brokerService = new MessageBrokerService()
   await brokerService.createConnection()
   return brokerService
 }
@@ -13,10 +12,9 @@ const messageBrokerServiceFactory = async (): Promise<MessageBrokerService> => {
 const main = async (): Promise<void> => {
   const brokerService = await messageBrokerServiceFactory()
   await producerFactory(brokerService)
-  // await consumerFactory(brokerService)
 }
 
 main().then(
-  () => console.log('Collector Running ...'),
+  () => console.log(`Collector Running and publishing to ${env.queueName} queue!`),
   error => console.error(error)
 )

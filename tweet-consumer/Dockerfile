@@ -1,6 +1,6 @@
 FROM node:14-alpine
 
-WORKDIR /usr/app/tweet-collector
+WORKDIR /usr/app/tweet-consumer
 
 COPY package.json .
 

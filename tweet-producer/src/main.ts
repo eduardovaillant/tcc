@@ -17,6 +17,9 @@ const main = async (): Promise<void> => {
 }
 
 main().then(
-  () => console.log(`Consuming ${env.queueName} queue ...`),
+  () => {
+    console.log(`Consuming ${env.queueName} queue!`)
+    console.log(`Inserting tweets on ${env.mongoCollection} mongo collection!`)
+  },
   error => console.error(error)
 )

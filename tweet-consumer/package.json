@@ -1,0 +1,50 @@
+{
+  "name": "tcc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/main.js",
+    "build": "rimraf dist && tsc",
+    "up:prod": "npm run build && docker-compose up -d",
+    "down:prod": "docker-compose down",
+    "up": "npm run build && docker-compose -f docker-compose.dev.yaml up -d",
+    "down": "docker-compose -f docker-compose.dev.yaml down"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardovaillant/twitter-parser.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eduardovaillant/twitter-parser/issues"
+  },
+  "homepage": "https://github.com/eduardovaillant/twitter-parser#readme",
+  "devDependencies": {
+    "@types/amqplib": "^0.8.2",
+    "@types/needle": "^2.5.2",
+    "@types/node": "^14.14.25",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "eslint": "^7.19.0",
+    "eslint-config-standard-with-typescript": "^20.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "git-commit-msg-linter": "^3.0.0",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.4",
+    "typescript": "^4.1.3"
+  },
+  "dependencies": {
+    "amqplib": "^0.8.0",
+    "dotenv": "^10.0.0",
+    "module-alias": "^2.2.2",
+    "mongodb": "^4.1.1",
+    "needle": "^2.8.0"
+  },
+  "_moduleAliases": {
+    "@": "dist"
+  }
+}

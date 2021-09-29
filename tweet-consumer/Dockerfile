@@ -4,7 +4,7 @@ WORKDIR /usr/app/tweet-consumer
 
 COPY package.json .
 
-RUN npm install && npm install typescript -g
+RUN npm install --only=prod && npm install typescript -g
 
 COPY . .
 

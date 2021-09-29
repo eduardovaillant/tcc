@@ -14,6 +14,11 @@ services:
   tweet-collector:
     build:
       context: tweet-collector/
+    environment:
+      - QUEUE_NAME=$QUEUE_NAME
+      - RABBITMQ_URL=$RABBITMQ_URL
+      - TWITTER_BASE_URL=$TWITTER_BASE_URL
+      - BEARER_TOKEN=$BEARER_TOKEN
     container_name: tweet-collector  
     restart: always 
     volumes: 
@@ -22,47 +27,4 @@ services:
     depends_on:
       - rabbitmq   
     links: 
-      - rabbitmq   
-
-  elasticsearch:
-    build:
-      context: elasticsearch/
-      args:
-        ELK_VERSION: $ELK_VERSION
-    volumes:
-      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      ELASTIC_PASSWORD: changeme   
-
-  logstash:
-    build:
-      context: logstash/
-      args:
-        ELK_VERSION: $ELK_VERSION
-    volumes:
-      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
-    ports:
-      - "5044:5044"
-      - "9600:9600"
-    environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    depends_on:
-      - elasticsearch
       - rabbitmq
-
-  kibana:
-    build:
-      context: kibana/
-      args:
-        ELK_VERSION: $ELK_VERSION
-    volumes:
-      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch      

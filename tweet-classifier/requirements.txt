@@ -1,2 +1,0 @@
-pika>=1.2.0
-tweet-preprocessor>=0.6.0

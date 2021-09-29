@@ -5,11 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/main.js",
-    "build": "rimraf dist && tsc",
-    "up:prod": "npm run build && docker-compose up -d",
-    "down:prod": "docker-compose down",
-    "up": "npm run build && docker-compose -f docker-compose.dev.yaml up -d",
-    "down": "docker-compose -f docker-compose.dev.yaml down"
+    "build": "rimraf dist && tsc"
   },
   "repository": {
     "type": "git",

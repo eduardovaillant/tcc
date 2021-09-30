@@ -1,9 +1,9 @@
 version: "3.2"
 services:
   rabbitmq:
-    image: rabbitmq:3.8-management
-    restart: always
     container_name: 'rabbitmq'
+    image: rabbitmq:3.8-management-alpine
+    restart: always
     ports:
         - 5672:5672
         - 15672:15672
@@ -12,14 +12,17 @@ services:
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq  
 
   tweet-collector:
+    container_name: tweet-collector  
     build:
       context: tweet-collector/
+    # image: tcc/tweet-collector
     environment:
-      - QUEUE_NAME=$QUEUE_NAME
+      - ENVIRONMENT=$ENVIRONMENT
+      - QUEUE_NAME=$QUEUE_NAME_EAD
       - RABBITMQ_URL=$RABBITMQ_URL
       - TWITTER_BASE_URL=$TWITTER_BASE_URL
       - BEARER_TOKEN=$BEARER_TOKEN
-    container_name: tweet-collector  
+      - MONGO_PROD_URL=$MONGO_PROD_URL
     restart: always 
     volumes: 
       - ./dist/:/usr/src/tweet-collector/dist/:z
@@ -28,3 +31,23 @@ services:
       - rabbitmq   
     links: 
       - rabbitmq
+
+  tweet-consumer-ead:
+    container_name: tweet-consumer  
+    build:
+      context: tweet-consumer/
+    # image: tcc/tweet-consumer
+    environment:
+      - ENVIRONMENT=$ENVIRONMENT
+      - QUEUE_NAME=$QUEUE_NAME_EAD
+      - RABBITMQ_URL=$RABBITMQ_URL
+      - MONGO_PROD_URL=$MONGO_PROD_URL
+    restart: always 
+    volumes: 
+      - ./dist/:/usr/src/tweet-consumer-ead/dist/:z
+      - ./package.json:/usr/src/tweet-consumer-ead/package.json:z
+    depends_on:
+      - rabbitmq   
+      - tweet-collector
+    links: 
+      - rabbitmq      

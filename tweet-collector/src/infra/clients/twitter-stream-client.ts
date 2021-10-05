@@ -6,7 +6,8 @@ import needle from 'needle'
 
 export class TweetStreamClient {
   constructor (
-    private readonly brokerService: MessageBrokerService
+    private readonly eadBrokerService: MessageBrokerService,
+    private readonly presentialBrokerService: MessageBrokerService
   ) {}
 
   async start (): Promise<void> {
@@ -22,9 +23,13 @@ export class TweetStreamClient {
 
         const tweet = this.tweetDataTransformer(json)
 
-        console.log(tweet)
+        const isEad = tweet.matching_rules.filter(rule => rule.tag === 'ead')
 
-        this.brokerService.publish(JSON.stringify(tweet))
+        if (isEad) {
+          this.eadBrokerService.publish(JSON.stringify(tweet))
+        }
+
+        this.presentialBrokerService.publish(JSON.stringify(tweet))
       } catch (error) {
         console.error(error)
       }

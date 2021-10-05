@@ -11,43 +11,45 @@ services:
         - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq  
 
-  tweet-collector:
-    container_name: tweet-collector  
-    build:
-      context: tweet-collector/
-    # image: tcc/tweet-collector
-    environment:
-      - ENVIRONMENT=$ENVIRONMENT
-      - QUEUE_NAME=$QUEUE_NAME_EAD
-      - RABBITMQ_URL=$RABBITMQ_URL
-      - TWITTER_BASE_URL=$TWITTER_BASE_URL
-      - BEARER_TOKEN=$BEARER_TOKEN
-      - MONGO_PROD_URL=$MONGO_PROD_URL
-    restart: always 
-    volumes: 
-      - ./dist/:/usr/src/tweet-collector/dist/:z
-      - ./package.json:/usr/src/tweet-collector/package.json:z
-    depends_on:
-      - rabbitmq   
-    links: 
-      - rabbitmq
+  # tweet-collector:
+  #   container_name: tweet-collector  
+  #   build:
+  #     context: tweet-collector/
+  #   # image: tcc/tweet-collector
+  #   environment:
+  #     - ENVIRONMENT=$ENVIRONMENT
+  #     - EAD_QUEUE_NAME=$EAD_QUEUE_NAME
+  #     - RABBITMQ_URL=$RABBITMQ_URL
+  #     - TWITTER_BASE_URL=$TWITTER_BASE_URL
+  #     - BEARER_TOKEN=$BEARER_TOKEN
+  #     - MONGO_PROD_URL=$MONGO_PROD_URL
+  #   restart: always 
+  #   volumes: 
+  #     - ./dist/:/usr/src/tweet-collector/dist/:z
+  #     - ./package.json:/usr/src/tweet-collector/package.json:z
+  #   depends_on:
+  #     - rabbitmq   
+  #   links: 
+  #     - rabbitmq
 
-  tweet-consumer-ead:
-    container_name: tweet-consumer  
-    build:
-      context: tweet-consumer/
-    # image: tcc/tweet-consumer
-    environment:
-      - ENVIRONMENT=$ENVIRONMENT
-      - QUEUE_NAME=$QUEUE_NAME_EAD
-      - RABBITMQ_URL=$RABBITMQ_URL
-      - MONGO_PROD_URL=$MONGO_PROD_URL
-    restart: always 
-    volumes: 
-      - ./dist/:/usr/src/tweet-consumer-ead/dist/:z
-      - ./package.json:/usr/src/tweet-consumer-ead/package.json:z
-    depends_on:
-      - rabbitmq   
-      - tweet-collector
-    links: 
-      - rabbitmq      
+  # tweet-consumer-ead:
+  #   container_name: tweet-consumer  
+  #   build:
+  #     context: tweet-consumer/
+  #   # image: tcc/tweet-consumer
+  #   environment:
+  #     - ENVIRONMENT=$ENVIRONMENT
+  #     - QUEUE_NAME=$EAD_QUEUE_NAME
+  #     - RABBITMQ_URL=$RABBITMQ_URL
+  #     - MONGO_PROD_URL=$MONGO_PROD_URL
+  #     - MONGO_DEV_URL=$MONGO_PROD_URL
+  #     - MONGO_COLLECTION:$EAD_MONGO_COLLECTION
+  #   restart: always 
+  #   volumes: 
+  #     - ./dist/:/usr/src/tweet-consumer-ead/dist/:z
+  #     - ./package.json:/usr/src/tweet-consumer-ead/package.json:z
+  #   depends_on:
+  #     - rabbitmq      
+  #     - tweet-collector
+  #   links: 
+  #     - rabbitmq      

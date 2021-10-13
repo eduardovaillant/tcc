@@ -1,5 +1,14 @@
 version: "3.2"
 services:
+  # mongo:
+  #   container_name: mongo-container
+  #   image: mongo:latest
+  #   restart: always
+  #   volumes:
+  #     - ./data:/data/db:z
+  #   ports:
+  #     - "27017:27017"
+
   rabbitmq:
     container_name: 'rabbitmq'
     image: rabbitmq:3.8-management-alpine
@@ -15,6 +24,7 @@ services:
     container_name: tweet-collector  
     build:
       context: tweet-collector/
+    # image: tcc/tweet-collector
     environment:
       - ENVIRONMENT=$ENVIRONMENT
       - EAD_QUEUE_NAME=$EAD_QUEUE_NAME
@@ -48,8 +58,10 @@ services:
       - ./package.json:/usr/src/tweet-consumer-ead/package.json:z
     depends_on:
       - rabbitmq
+      # - mongo
     links: 
       - rabbitmq
+      # - mongo
   
   tweet-consumer-presential:
     container_name: tweet-consumer-presential 
@@ -68,5 +80,7 @@ services:
       - ./package.json:/usr/src/tweet-consumer-ead/package.json:z
     depends_on:
       - rabbitmq
+      # - mongo
     links: 
       - rabbitmq
+      # - mongo

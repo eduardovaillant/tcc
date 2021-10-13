@@ -1,13 +1,13 @@
 version: "3.2"
 services:
-  # mongo:
-  #   container_name: mongo-container
-  #   image: mongo:latest
-  #   restart: always
-  #   volumes:
-  #     - ./data:/data/db:z
-  #   ports:
-  #     - "27017:27017"
+  mongo:
+    container_name: mongo-container
+    image: mongo:latest
+    restart: always
+    volumes:
+      - ./data:/data/db:z
+    ports:
+      - "27017:27017"
 
   rabbitmq:
     container_name: 'rabbitmq'
@@ -58,10 +58,10 @@ services:
       - ./package.json:/usr/src/tweet-consumer-ead/package.json:z
     depends_on:
       - rabbitmq
-      # - mongo
+      - mongo
     links: 
       - rabbitmq
-      # - mongo
+      - mongo
   
   tweet-consumer-presential:
     container_name: tweet-consumer-presential 
@@ -80,7 +80,7 @@ services:
       - ./package.json:/usr/src/tweet-consumer-ead/package.json:z
     depends_on:
       - rabbitmq
-      # - mongo
+      - mongo
     links: 
       - rabbitmq
-      # - mongo
+      - mongo

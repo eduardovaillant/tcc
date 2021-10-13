@@ -23,7 +23,7 @@ export class TweetStreamClient {
 
         const tweet = this.tweetDataTransformer(json)
 
-        const isEad = tweet.matching_rules.filter(rule => rule.tag === 'ead')
+        const isEad = tweet.matching_rules.filter(rule => rule.tag.toLowerCase() === 'ead')
 
         if (isEad.length > 0) {
           this.eadBrokerService.publish(JSON.stringify(tweet))

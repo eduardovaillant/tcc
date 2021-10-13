@@ -25,11 +25,12 @@ export class TweetStreamClient {
 
         const isEad = tweet.matching_rules.filter(rule => rule.tag === 'ead')
 
-        if (isEad) {
+        if (isEad.length > 0) {
           this.eadBrokerService.publish(JSON.stringify(tweet))
+        } else {
+          this.presentialBrokerService.publish(JSON.stringify(tweet))
         }
 
-        this.presentialBrokerService.publish(JSON.stringify(tweet))
       } catch (error) {
         console.error(error)
       }
